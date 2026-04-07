@@ -7,9 +7,9 @@
 !.gitattributes
 
 # �����Ă����f�B���N�g���Ƃ��̓��e
-!GraduationResearch/Assets/
-!GraduationResearch/Assets/**
-!GraduationResearch/Packages/
-!GraduationResearch/Packages/**
-!GraduationResearch/ProjectSettings/
-!GraduationResearch/ProjectSettings/**
+!Assets/
+!Assets/**
+!Packages/
+!Packages/**
+!ProjectSettings/
+!ProjectSettings/**
