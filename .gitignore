@@ -1,0 +1,15 @@
+# �S�Ă𖳎�
+*
+
+# �����Ă����t�@�C��
+!.gitignore
+!.editorconfig
+!.gitattributes
+
+# �����Ă����f�B���N�g���Ƃ��̓��e
+!Assets/
+!Assets/**
+!Packages/
+!Packages/**
+!ProjectSettings/
+!ProjectSettings/**
