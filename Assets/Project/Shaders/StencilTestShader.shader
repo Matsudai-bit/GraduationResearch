@@ -1,4 +1,4 @@
-Shader "Custom/VerySmallShader"
+Shader "Custom/StencilTestShader"
 {
     Properties
   {
@@ -16,6 +16,11 @@ ENDCG
   {
     Pass
     {
+        Stencil {
+		Ref 1
+        Comp Equal    // 1 ‚Æ“™‚µ‚¢êŠ‚¾‚¯•`‰æ
+            
+		}
       CGPROGRAM
       #pragma vertex vert
       #pragma fragment frag

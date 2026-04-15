@@ -1,4 +1,4 @@
-Shader "Custom/VerySmallShader"
+Shader "Custom/StencilMaskTestShader"
 {
     Properties
   {
@@ -14,8 +14,23 @@ CGINCLUDE
 ENDCG
   SubShader
   {
+    Tags
+    {
+        "RenderType" = "Opaque"
+//        "Queue" = "Geometry-1"
+    }
     Pass
     {
+            //カラーチャンネルに書き込むレンダーターゲットを設定する
+        //0の場合、全てのカラーチャンネルが無効化され何も書き込まれない
+        ColorMask 0
+        ZWrite Off
+        Stencil {
+			Ref 1
+			Comp Always
+			Pass replace
+            
+		}
       CGPROGRAM
       #pragma vertex vert
       #pragma fragment frag
