@@ -3,6 +3,9 @@ Shader "Custom/StencilTestShader"
     Properties
   {
     _Tex ("Tex", 2D) = "white" {}
+    // 3 は Equal（マスク部分のみ）、8 は Always（常に表示）を意味します
+        [Enum(UnityEngine.Rendering.CompareFunction)] _StencilComp ("Stencil Test", Float) = 3
+
   }
 CGINCLUDE
 
@@ -14,12 +17,13 @@ CGINCLUDE
 ENDCG
   SubShader
   {
+   
     Pass
     {
+        ZTest Always    // 巨大な球体でも、手前のオブジェクトを上書きしないようにする
         Stencil {
 		Ref 1
-        Comp Equal    // 1 と等しい場所だけ描画
-            
+        Comp [_StencilComp]            
 		}
       CGPROGRAM
       #pragma vertex vert
