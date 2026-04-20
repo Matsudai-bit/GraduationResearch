@@ -17,7 +17,7 @@ ENDCG
     Tags
     {
         "RenderType" = "Opaque"
-       "Queue" = "Geometry-1"
+  //     "Queue" = "Geometry-1"
     }
     Pass
     {

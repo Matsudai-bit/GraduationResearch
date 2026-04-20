@@ -14,6 +14,13 @@ CGINCLUDE
 ENDCG
   SubShader
   {
+          Tags
+    {
+        "RenderType" = "Opaque"
+       //"Queue" = "Geometry+1"
+     
+    }
+       
     Pass
     {
       CGPROGRAM
