@@ -9,6 +9,10 @@ public class CharacterController : MonoBehaviour
     [SerializeField]
     private TrailRenderer       m_trailRenderer;
 
+    private float m_masterTrailRendererTime = 0.0f;
+
+    public float m_initialSpeed = 1.0f;
+
     CharacterSpeed              m_characterSpeed = new();
 
     private void Awake()
@@ -17,21 +21,25 @@ public class CharacterController : MonoBehaviour
         m_particle      = (!m_particle)     ? GetComponent<ParticleSystem>()    : m_particle;
         m_director      = (!m_director)     ? GetComponent<PlayableDirector>()  : m_director;
         m_trailRenderer = (!m_trailRenderer)? GetComponent<TrailRenderer>()     : m_trailRenderer;
+
     }
 
     private void Start()
     {
-        m_characterSpeed.onChangeBaseSpeed = UpdateSpeed;
+        m_characterSpeed.onChangeAnimationSpeed = UpdateSpeed;
 
    //     UpdateSpeed(0.1f);
 
-        m_characterSpeed.Initialize();
+        m_characterSpeed.Initialize(GetComponent<SpeedTag>());
 
-        m_characterSpeed.onChangeBaseSpeed?.Invoke(0.5f);
+        m_masterTrailRendererTime = m_trailRenderer.time;
+        m_characterSpeed.SetAnimationSpeed(m_initialSpeed);
+
     }
 
     private void UpdateSpeed(float speed)
     {
+
         // Animatorのスピード更新
         if (m_animator)
         {
@@ -48,7 +56,7 @@ public class CharacterController : MonoBehaviour
 
         if (m_trailRenderer)
         {
-            m_trailRenderer.time /= speed;
+            m_trailRenderer.time = m_masterTrailRendererTime  /  speed;
         }
 
         // Timelineのスピード更新
@@ -59,12 +67,13 @@ public class CharacterController : MonoBehaviour
                 m_director.playableGraph.GetRootPlayable(i).SetSpeed(speed);
             }
         }
+        Debug.Log("速度の変更私は" + gameObject.name + "\n　所持しているタグの値は "+ GetComponent<SpeedTag>().SpeedTypeMask +　"\n　現在の速度は" + speed);
 
     }
  
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 }
