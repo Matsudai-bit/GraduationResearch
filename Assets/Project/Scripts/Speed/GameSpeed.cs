@@ -23,6 +23,7 @@ public class GameSpeed
     public void SetSpeed(float speed)
     {
         m_speed = speed;
+        Debug.Log("‘¬“x‚Ì•ÏXF" + speed);
         OnValueChange?.Invoke(speed);
     }
 };

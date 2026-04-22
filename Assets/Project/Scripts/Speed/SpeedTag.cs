@@ -8,7 +8,20 @@ public class SpeedTag : MonoBehaviour
 
     // MaskField で選択されたビットマスク
     [SerializeField] private int m_speedTypeMask;
-    public int SpeedTypeMask => m_speedTypeMask;
+    public int SpeedTypeMask
+    {
+        get
+        {
+
+            return m_speedTypeMask;
+        }
+        set
+        {
+            m_speedTypeMask = value;
+        }
+
+    }
+
     public SpeedTypeDefinition Definition => m_definition;
 
     public bool HasType(int bitIndex) => (m_speedTypeMask & (1 << bitIndex)) != 0;
