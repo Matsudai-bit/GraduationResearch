@@ -11,6 +11,9 @@ public class GameSpeed
 
     public Action<float> OnValueChange;
 
+    public Action<int> onChangeSpeedTag;
+
+
     public void Initialize(SpeedTag speedTag)
     {
         if (!speedTag)
@@ -18,6 +21,11 @@ public class GameSpeed
             Debug.LogError("SpeedTagがnullです");
         }
         m_tag = speedTag;
+
+        m_tag.onChange = bitMask =>
+        {
+
+        };
     }
 
     public void SetSpeed(float speed)
@@ -26,5 +34,19 @@ public class GameSpeed
         Debug.Log("速度の変更：" + speed);
         OnValueChange?.Invoke(speed);
     }
+
+    /// <summary>
+    /// ビットマスクの設定
+    /// </summary>
+    /// <param name="maskBit"></param>
+    public void SetBitMask(int maskBit)
+    {
+        if ((maskBit & m_tag.SpeedTypeMask) != m_tag.SpeedTypeMask)
+        {
+            m_tag.SpeedTypeMask = maskBit;
+            onChangeSpeedTag?.Invoke(m_tag.SpeedTypeMask);
+        }
+    }
+
 };
     

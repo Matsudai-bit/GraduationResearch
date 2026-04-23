@@ -18,17 +18,23 @@ public class DomeController : MonoBehaviour
     {
         SpeedController.Instance.SetSpeed(GetComponent<SpeedTag>(), 1.0f);
         if (other.gameObject.GetComponent<SpeedTag>())
-            other.gameObject.GetComponent<SpeedTag>().SpeedTypeMask -= GetComponent<SpeedTag>().SpeedTypeMask;
+        {
+            var tag = other.gameObject.GetComponent<SpeedTag>();
+            tag.SetBitMask( GetComponent<SpeedTag>().SpeedTypeMask - tag.SpeedTypeMask );
+        }
 
     }
-
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.GetComponent<SpeedTag>())
-            other.gameObject.GetComponent<SpeedTag>().SpeedTypeMask += GetComponent<SpeedTag>().SpeedTypeMask;
+        {
+            var tag = other.gameObject.GetComponent<SpeedTag>();
+            tag.SetBitMask(GetComponent<SpeedTag>().SpeedTypeMask + tag.SpeedTypeMask);
+        }
 
         SpeedController.Instance.SetSpeed(GetComponent<SpeedTag>(), 0.1f);
 
     }
+
 }
 
