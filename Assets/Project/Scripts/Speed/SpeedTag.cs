@@ -30,9 +30,10 @@ public class SpeedTag : MonoBehaviour
     /// <param name="maskBit"></param>
     public void SetBitMask(int maskBit)
     {
-        if ((maskBit & m_speedTypeMask) != m_speedTypeMask)
+        if (maskBit != m_speedTypeMask)
         {
             m_speedTypeMask = maskBit;
+            Debug.Log("マスクの更新 : " + m_speedTypeMask);
             onChange?.Invoke(m_speedTypeMask);
         }
     }

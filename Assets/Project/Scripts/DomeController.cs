@@ -5,6 +5,7 @@ public class DomeController : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        SpeedController.Instance.SetSpeed(GetComponent<SpeedTag>(), 0.1f);
 
     }
 
@@ -16,11 +17,11 @@ public class DomeController : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        SpeedController.Instance.SetSpeed(GetComponent<SpeedTag>(), 1.0f);
         if (other.gameObject.GetComponent<SpeedTag>())
         {
             var tag = other.gameObject.GetComponent<SpeedTag>();
-            tag.SetBitMask( GetComponent<SpeedTag>().SpeedTypeMask - tag.SpeedTypeMask );
+            var newMask = GetComponent<SpeedTag>().SpeedTypeMask & ~tag.SpeedTypeMask;
+            tag.SetBitMask(newMask);
         }
 
     }
@@ -29,10 +30,10 @@ public class DomeController : MonoBehaviour
         if (other.gameObject.GetComponent<SpeedTag>())
         {
             var tag = other.gameObject.GetComponent<SpeedTag>();
-            tag.SetBitMask(GetComponent<SpeedTag>().SpeedTypeMask + tag.SpeedTypeMask);
+            var newMask = GetComponent<SpeedTag>().SpeedTypeMask | tag.SpeedTypeMask;
+            tag.SetBitMask(newMask);
         }
 
-        SpeedController.Instance.SetSpeed(GetComponent<SpeedTag>(), 0.1f);
 
     }
 

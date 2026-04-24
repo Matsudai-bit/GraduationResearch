@@ -25,6 +25,29 @@ public class SpeedController : SingletonMonoBehaviour<SpeedController>
     {
         if (!m_gameSpeeds.Contains(speed))
         {
+            speed.onChangeSpeedTag = bitMask =>
+            {
+                float totalSpeed = 1.0f;
+
+                // KeyとValueを同時に取り出す
+                foreach (var entry in m_speedHolder)
+                {
+                    var tagData = entry.Key;
+                    var bonusValue = entry.Value;
+
+                    // ビット論理積 (&) で、bitMaskの中にそのタグが含まれているかチェック
+                    if ((tagData.SpeedTypeMask & bitMask) != 0)
+                    {
+                        totalSpeed *= bonusValue;
+                    }
+                }
+
+                Debug.Log($"速度の更新 : {totalSpeed} (Mask: {bitMask})");
+
+                // 元の変数 speed（オブジェクト）に対して値をセット
+                speed.SetSpeed(totalSpeed);
+            };
+
             m_gameSpeeds.Add(speed);
         }
 

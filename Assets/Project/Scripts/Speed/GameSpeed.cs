@@ -24,7 +24,7 @@ public class GameSpeed
 
         m_tag.onChange = bitMask =>
         {
-
+            onChangeSpeedTag?.Invoke(bitMask);
         };
     }
 

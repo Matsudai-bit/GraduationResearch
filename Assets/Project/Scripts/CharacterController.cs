@@ -3,11 +3,13 @@ using UnityEngine.Playables;
 
 public class CharacterController : MonoBehaviour
 {
+    [SerializeField]
     private Animator            m_animator;
     private ParticleSystem      m_particle;
     private PlayableDirector    m_director;
     [SerializeField]
     private TrailRenderer       m_trailRenderer;
+    private Rigidbody m_rb;
 
     private float m_masterTrailRendererTime = 0.0f;
 
@@ -21,6 +23,7 @@ public class CharacterController : MonoBehaviour
         m_particle      = (!m_particle)     ? GetComponent<ParticleSystem>()    : m_particle;
         m_director      = (!m_director)     ? GetComponent<PlayableDirector>()  : m_director;
         m_trailRenderer = (!m_trailRenderer)? GetComponent<TrailRenderer>()     : m_trailRenderer;
+        
 
     }
 
