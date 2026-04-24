@@ -13,9 +13,9 @@ public class CharacterController : MonoBehaviour
 
     private float m_masterTrailRendererTime = 0.0f;
 
-    public float m_initialSpeed = 1.0f;
+    public float m_initialTimeScale = 1.0f;
 
-    CharacterSpeed              m_characterSpeed = new();
+    LocalTimeScaleHandle              m_characterSpeed = new();
 
     private void Awake()
     {
@@ -29,14 +29,14 @@ public class CharacterController : MonoBehaviour
 
     private void Start()
     {
-        m_characterSpeed.onChangeAnimationSpeed = UpdateSpeed;
+        m_characterSpeed.onChangeAnimationTimeScale = UpdateSpeed;
 
    //     UpdateSpeed(0.1f);
 
-        m_characterSpeed.Initialize(GetComponent<SpeedTag>());
+        m_characterSpeed.Initialize(GetComponent<LocalTimeScaleLayer>());
 
         m_masterTrailRendererTime = m_trailRenderer.time;
-        m_characterSpeed.SetAnimationSpeed(m_initialSpeed);
+        m_characterSpeed.SetAnimationTimeScale(m_initialTimeScale);
 
     }
 
@@ -70,7 +70,7 @@ public class CharacterController : MonoBehaviour
                 m_director.playableGraph.GetRootPlayable(i).SetSpeed(speed);
             }
         }
-        Debug.Log("速度の変更私は" + gameObject.name + "\n　所持しているタグの値は "+ GetComponent<SpeedTag>().SpeedTypeMask +　"\n　現在の速度は" + speed);
+        Debug.Log("速度の変更私は" + gameObject.name + "\n　所持しているタグの値は "+ GetComponent<LocalTimeScaleLayer>().TimeScaleLayerMask +　"\n　現在の速度は" + speed);
 
     }
  

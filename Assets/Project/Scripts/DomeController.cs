@@ -5,7 +5,7 @@ public class DomeController : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        SpeedController.Instance.SetSpeed(GetComponent<SpeedTag>(), 0.1f);
+        LocalTimeScaleManager.Instance.SetTimeScale(GetComponent<LocalTimeScaleLayer>(), 0.1f);
 
     }
 
@@ -17,20 +17,20 @@ public class DomeController : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.gameObject.GetComponent<SpeedTag>())
+        if (other.gameObject.GetComponent<LocalTimeScaleLayer>())
         {
-            var tag = other.gameObject.GetComponent<SpeedTag>();
-            var newMask = GetComponent<SpeedTag>().SpeedTypeMask & ~tag.SpeedTypeMask;
+            var tag = other.gameObject.GetComponent<LocalTimeScaleLayer>();
+            var newMask = GetComponent<LocalTimeScaleLayer>().TimeScaleLayerMask & ~tag.TimeScaleLayerMask;
             tag.SetBitMask(newMask);
         }
 
     }
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.GetComponent<SpeedTag>())
+        if (other.gameObject.GetComponent<LocalTimeScaleLayer>())
         {
-            var tag = other.gameObject.GetComponent<SpeedTag>();
-            var newMask = GetComponent<SpeedTag>().SpeedTypeMask | tag.SpeedTypeMask;
+            var tag = other.gameObject.GetComponent<LocalTimeScaleLayer>();
+            var newMask = GetComponent<LocalTimeScaleLayer>().TimeScaleLayerMask | tag.TimeScaleLayerMask;
             tag.SetBitMask(newMask);
         }
 

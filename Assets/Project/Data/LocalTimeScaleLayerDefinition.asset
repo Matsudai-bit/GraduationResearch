@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 42622ac1408b38c4392937789539bab6, type: 3}
-  m_Name: SpeedTypeDefinition
+  m_Name: LocalTimeScaleLayerDefinition
   m_EditorClassIdentifier: 
   m_typeNames:
   - A
