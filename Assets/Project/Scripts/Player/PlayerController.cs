@@ -14,6 +14,8 @@ public class PlayerController : MonoBehaviour
     private Vector2 m_moveCommand;  // 移動コマンド
     private Rigidbody m_rb;         // リジッドボディ
 
+    public CharacterController m_characterController;
+
 
     private void Awake()
     {
@@ -50,11 +52,11 @@ public class PlayerController : MonoBehaviour
             Vector3 moveDirection = cameraYawRotation * inputRaw;
 
             // 4. 移動（加速度計算）
-            Vector3 force = moveDirection * SPEED;
+            Vector3 force = moveDirection * SPEED * m_characterController.TimeScaleHandler.CurrentTimeScale;
             m_rb.AddForce(force);
 
             // 速度制限
-            m_rb.linearVelocity = Vector3.ClampMagnitude(m_rb.linearVelocity, SPEED);
+            m_rb.linearVelocity = Vector3.ClampMagnitude(m_rb.linearVelocity, SPEED * m_characterController.TimeScaleHandler.CurrentTimeScale);
 
             // 5. 回転：キャラクターを入力の方向（moveDirection）へ向かせる
             Quaternion targetRotation = Quaternion.LookRotation(moveDirection);

@@ -17,6 +17,8 @@ public class CharacterController : MonoBehaviour
 
     LocalTimeScaleHandle              m_characterSpeed = new();
 
+    public LocalTimeScaleHandle TimeScaleHandler { get { return m_characterSpeed; } }
+
     private void Awake()
     {
         m_animator      = (!m_animator)     ? GetComponent<Animator>()          : m_animator;
@@ -77,6 +79,6 @@ public class CharacterController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        m_characterSpeed.Update();
     }
 }

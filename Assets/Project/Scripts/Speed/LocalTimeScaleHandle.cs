@@ -4,12 +4,15 @@ using UnityEngine;
 public class LocalTimeScaleHandle 
 {
     private readonly LocalTimeScale m_baseTimeScale = new();  // 基準の速さ
+    private  LocalClock     m_localClock;
     public float CurrentTimeScale => m_baseTimeScale.TimeScale * m_animationTimeScale;
 
     public Action<float> onChangeBaseTimeScale;         // ベースタイムが変更された時に呼ばれる
     public Action<float> onChangeAnimationTimeScale;    // ベースタイムが変更された時に呼ばれる
 
     float m_animationTimeScale = 0.0f;
+
+    public LocalClock LocalClock { get { return m_localClock; } }
 
     /// <summary>
     /// 初期化処理
@@ -27,6 +30,16 @@ public class LocalTimeScaleHandle
             onChangeBaseTimeScale       ?.Invoke(baseTimeScale);
             onChangeAnimationTimeScale  ?.Invoke(baseTimeScale * m_animationTimeScale);
         };
+
+        m_localClock = new (m_baseTimeScale);
+    }
+
+    /// <summary>
+    /// 更新処理
+    /// </summary>
+    public void Update()
+    {
+        m_localClock.Update();
     }
 
     public void SetAnimationTimeScale(float timeScale)

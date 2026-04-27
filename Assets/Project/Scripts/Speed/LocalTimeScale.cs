@@ -6,13 +6,14 @@ public class LocalTimeScale
     private float m_timeScale = 1f;
 
     private LocalTimeScaleLayer m_timeScaleLayer ;
-    public float TimeScale => m_timeScale;
-    public LocalTimeScaleLayer TimeScaleLayer => m_timeScaleLayer;
+
 
     public Action<float> OnValueChange;
-
     public Action<int> onChangeTimeScaleLayer;
 
+
+    public float TimeScale => m_timeScale;
+    public LocalTimeScaleLayer TimeScaleLayer => m_timeScaleLayer;
 
     public void Initialize(LocalTimeScaleLayer timeScaleLayer)
     {
