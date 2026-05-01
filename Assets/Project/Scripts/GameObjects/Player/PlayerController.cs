@@ -14,6 +14,10 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private Animator m_animator;        // アニメーター
 
+    [Header("剣のコライダー")]
+    [SerializeField]
+    private Collider m_sordCollider;
+
     private Vector2 m_moveCommand;  // 移動コマンド
     private Rigidbody m_rb;         // リジッドボディ
 
@@ -47,6 +51,7 @@ public class PlayerController : MonoBehaviour
         m_stateMachine = new(this);
 
         m_stateMachine.PushState<IdlingPlayerState>();
+        m_sordCollider.gameObject.SetActive(false);
     }
 
     // Update is called once per frame
@@ -81,5 +86,23 @@ public class PlayerController : MonoBehaviour
     public void OnImpact()
     {
         m_isRequestImpacting = true;
+    }
+
+    public void EnableAttack()
+    {
+        m_sordCollider.gameObject.SetActive(true);
+    }
+    public void DisableAttack()
+    {
+        m_sordCollider.gameObject.SetActive(false);
+    }
+
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.GetComponent<CharacterController>())
+        {
+            other.gameObject.GetComponent<CharacterController>().TakeDamage(1);
+        }
     }
 }

@@ -1,7 +1,8 @@
+using System;
 using UnityEngine;
 using UnityEngine.Playables;
 
-public class CharacterController : MonoBehaviour
+public class CharacterController : MonoBehaviour , IDamageable
 {
     [SerializeField]
     private Animator            m_animator;
@@ -10,6 +11,8 @@ public class CharacterController : MonoBehaviour
     [SerializeField]
     private TrailRenderer       m_trailRenderer;
     private Rigidbody m_rb;
+
+    public Action<int> takeDamage;
 
     private float m_masterTrailRendererTime = 0.0f;
 
@@ -81,4 +84,21 @@ public class CharacterController : MonoBehaviour
     {
         m_characterSpeed.Update();
     }
+
+    /// <summary>
+    /// É_ÉÅÅ[ÉWÇéÛÇØÇÈ
+    /// </summary>
+    /// <param name="damage"></param>
+    /// <exception cref="System.NotImplementedException"></exception>
+    public void TakeDamage(int damage)
+    {
+        takeDamage?.Invoke(damage);
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+    
+    }
+
+
 }
