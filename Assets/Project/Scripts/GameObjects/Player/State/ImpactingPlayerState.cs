@@ -1,16 +1,16 @@
 using UnityEngine;
 
 /// <summary>
-/// プレイヤーの待機状態
+/// プレイヤーの衝撃状態
 /// </summary>
-public class IdlingPlayerState : StateBase<PlayerController>
+public class ImpactingPlayerState : StateBase<PlayerController>
 {
-    private  AnimationEventHandler m_animationEventHandler; // アニメーションイベントハンドラー
+    private AnimationEventHandler m_animationEventHandler; // アニメーションイベントハンドラー
 
     /// <summary>
     /// コンストラクタ
     /// </summary>
-    public IdlingPlayerState()
+    public ImpactingPlayerState()
     {
     }
 
@@ -21,7 +21,10 @@ public class IdlingPlayerState : StateBase<PlayerController>
     {
         m_animationEventHandler = new(Owner.Animator);
 
-        //m_animationEventHandler.PlayAnimationBool("Attack", "BaseLayer", "Attack");
+        m_animationEventHandler.PlayAnimationBool("Impacting", "BaseLayer", "Impacting");
+
+        //Owner.Animator.SetBool("Running", true)
+
     }
 
     /// <summary>
@@ -30,7 +33,8 @@ public class IdlingPlayerState : StateBase<PlayerController>
     /// <param name="deltaTime">フレーム</param>
     protected override void OnFixedUpdate()
     {
-          
+         
+
     }
 
     /// <summary>
@@ -39,21 +43,12 @@ public class IdlingPlayerState : StateBase<PlayerController>
     /// <param name="deltaTime">フレーム</param>
     protected override void OnUpdate(float deltaTime)
     {
+
         m_animationEventHandler.OnUpdate();
 
-        if (!Mathf.Approximately(0.0f, Owner.MoveCommand.sqrMagnitude))
+        if (!m_animationEventHandler.IsPlaying())
         {
-            Machine.PushState<WalkingPlayerState>();
-
-        }
-
-        if (Owner.IsRequestedImpact)
-        {
-            Machine.PushState<ImpactingPlayerState>();
-        }
-        else if (Owner.IsRequestedAttack)
-        {
-            Machine.PushState<AttackingPlayerState>();
+            Machine.PopState();
         }
     }
 
@@ -62,6 +57,7 @@ public class IdlingPlayerState : StateBase<PlayerController>
     /// </summary>
     protected override void OnExitState()
     {
-        
+        m_animationEventHandler.StopAnimation();
+
     }
 }

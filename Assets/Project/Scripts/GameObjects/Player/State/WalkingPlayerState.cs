@@ -78,7 +78,11 @@ public class WalkingPlayerState : StateBase<PlayerController>
 
         m_animationEventHandler.OnUpdate();
 
-        if (Owner.IsRequestedAttack)
+        if (Owner.IsRequestedImpact)
+        {
+            Machine.PushState<ImpactingPlayerState>();
+        }
+        else if (Owner.IsRequestedAttack)
         {
             Machine.PushState<AttackingPlayerState>();
         }

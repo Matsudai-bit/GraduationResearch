@@ -20,6 +20,7 @@ public class PlayerController : MonoBehaviour
     StateMachine<PlayerController> m_stateMachine ;
 
     private bool m_isRequestAttacking = false;
+    private bool m_isRequestImpacting = false;
 
     public CharacterController m_characterController;
 
@@ -32,6 +33,7 @@ public class PlayerController : MonoBehaviour
     public LocalTimeScaleHandle TimeScaleHandler => m_characterController.TimeScaleHandler;
 
     public bool IsRequestedAttack => m_isRequestAttacking;
+    public bool IsRequestedImpact => m_isRequestImpacting;
 
     private void Awake()
     {
@@ -53,6 +55,7 @@ public class PlayerController : MonoBehaviour
         m_stateMachine.Update(Time.deltaTime);
 
         m_isRequestAttacking = false;
+        m_isRequestImpacting = false;
     }
 
     private void FixedUpdate()
@@ -73,5 +76,10 @@ public class PlayerController : MonoBehaviour
         {
             m_isRequestAttacking = true;
         }
+    }
+
+    public void OnImpact()
+    {
+        m_isRequestImpacting = true;
     }
 }
