@@ -3,9 +3,6 @@ using UnityEngine;
 public class AnotherWorldCamera : MonoBehaviour
 {
 
-    [SerializeField]
-    private float m_value = 30.0f;
-
     float m_time = 0.0f;
 
 

@@ -2,14 +2,14 @@ using UnityEngine;
 
 public class EnemyController : MonoBehaviour
 {
-    private CharacterController m_characterController;
+    private GameCharacterController m_characterController;
     public Animator m_animator;
 
     private AnimationEventHandler m_animationEventHandler;
 
     private void Awake()
     {
-        m_characterController = GetComponent<CharacterController>();
+        m_characterController = GetComponent<GameCharacterController>();
 
         m_animationEventHandler = new(m_animator);
     }
@@ -26,8 +26,11 @@ public class EnemyController : MonoBehaviour
     {
     }
 
-    void TakeDamage(int damage)
+    void TakeDamage(int damage, GameObject attacker)
     {
+        Debug.Log("Hit!!!!!!!!!!1");
         m_animationEventHandler.PlayAnimationTrigger("Impacting", "BaseLayer", "Impacting");
+
+       transform.LookAt(attacker.gameObject.transform);
     }
 }

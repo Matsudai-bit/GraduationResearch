@@ -116,7 +116,7 @@ public class AnimationEventHandler
     private void PlayAnimation(string animationName, string layerName)
     {
         m_layerIndex = m_animator.GetLayerIndex(layerName);
-        // アニメーションを開始
+
         m_animator.Play(animationName, m_layerIndex);
         // アニメーションのハッシュを取得
         m_currentAnimationHash = Animator.StringToHash(layerName + "." + animationName);

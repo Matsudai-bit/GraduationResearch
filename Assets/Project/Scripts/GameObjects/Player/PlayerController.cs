@@ -26,7 +26,7 @@ public class PlayerController : MonoBehaviour
     private bool m_isRequestAttacking = false;
     private bool m_isRequestImpacting = false;
 
-    public CharacterController m_characterController;
+    public GameCharacterController m_characterController;
 
 
 
@@ -100,9 +100,9 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.GetComponent<CharacterController>())
+        if (other.gameObject.GetComponent<GameCharacterController>())
         {
-            other.gameObject.GetComponent<CharacterController>().TakeDamage(1);
+            other.gameObject.GetComponent<GameCharacterController>().TakeDamage(1, gameObject);
         }
     }
 }

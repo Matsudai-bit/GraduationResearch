@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.Playables;
 
-public class CharacterController : MonoBehaviour , IDamageable
+public class GameCharacterController : MonoBehaviour , IDamageable
 {
     [SerializeField]
     private Animator            m_animator;
@@ -12,7 +12,7 @@ public class CharacterController : MonoBehaviour , IDamageable
     private TrailRenderer       m_trailRenderer;
     private Rigidbody m_rb;
 
-    public Action<int> takeDamage;
+    public Action<int, GameObject> takeDamage;
 
     private float m_masterTrailRendererTime = 0.0f;
 
@@ -90,9 +90,9 @@ public class CharacterController : MonoBehaviour , IDamageable
     /// </summary>
     /// <param name="damage"></param>
     /// <exception cref="System.NotImplementedException"></exception>
-    public void TakeDamage(int damage)
+    public void TakeDamage(int damage, GameObject attacker)
     {
-        takeDamage?.Invoke(damage);
+        takeDamage?.Invoke(damage, attacker);
     }
 
     private void OnCollisionEnter(Collision collision)

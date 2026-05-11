@@ -21,7 +21,7 @@ public class ImpactingPlayerState : StateBase<PlayerController>
     {
         m_animationEventHandler = new(Owner.Animator);
 
-        m_animationEventHandler.PlayAnimationBool("Impacting", "BaseLayer", "Impacting");
+        m_animationEventHandler.PlayAnimationTrigger("Impacting", "BaseLayer", "Impacting");
 
         //Owner.Animator.SetBool("Running", true)
 
@@ -57,7 +57,6 @@ public class ImpactingPlayerState : StateBase<PlayerController>
     /// </summary>
     protected override void OnExitState()
     {
-        m_animationEventHandler.StopAnimation();
 
     }
 }

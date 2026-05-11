@@ -65,7 +65,6 @@ public class WalkingPlayerState : StateBase<PlayerController>
         {
             Machine.PopState();
         }
-        Debug.Log("‘¬“x" + rb.linearVelocity.magnitude);
 
     }
 
