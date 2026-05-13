@@ -29,6 +29,7 @@ public class PlayerController : MonoBehaviour
 
     private bool m_isRequestAttacking = false;
     private bool m_isRequestInteracting = false;
+    private bool m_isRequestSlashing = false;
 
     public GameCharacterController m_characterController;
 
@@ -42,6 +43,7 @@ public class PlayerController : MonoBehaviour
 
     public bool IsRequestedAttack => m_isRequestAttacking;
     public bool IsRequestedInteracting => m_isRequestInteracting;
+    public bool IsRequestedSlashing => m_isRequestSlashing;
 
     private void Awake()
     {
@@ -64,6 +66,7 @@ public class PlayerController : MonoBehaviour
 
         m_isRequestAttacking = false;
         m_isRequestInteracting = false;
+        m_isRequestSlashing = false;
     }
 
     private void FixedUpdate()
@@ -82,14 +85,26 @@ public class PlayerController : MonoBehaviour
     {
         if (!context.performed)
         {
-            m_isRequestAttacking = true;
+            if (m_domeObject.activeSelf)
+            {
+                m_isRequestSlashing = true;
+            }
+            else
+            {
+                m_isRequestAttacking = true;
+            }
         }
     }
 
-    public void OnInteract()
+    public void OnInteract(InputAction.CallbackContext context)
     {
-        m_domeObject.SetActive(true);
-        m_domeObject.transform.position = new( transform.position.x, 0.0f, transform.position.z);
+     //   if (!context.performed)
+        {
+            Debug.Log("osita");
+            m_domeObject.SetActive(!m_domeObject.activeSelf);
+            m_domeObject.transform.position = new(transform.position.x, 0.0f, transform.position.z);
+        }
+       
     }
 
     public void EnableAttack()

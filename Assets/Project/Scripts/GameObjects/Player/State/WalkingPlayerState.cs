@@ -82,6 +82,10 @@ public class WalkingPlayerState : StateBase<PlayerController>
         {
             Machine.PushState<AttackingPlayerState>();
         }
+        else if (Owner.IsRequestedSlashing)
+        {
+            Machine.PushState<SlashingPlayerState>();
+        }
     }
 
     /// <summary>
