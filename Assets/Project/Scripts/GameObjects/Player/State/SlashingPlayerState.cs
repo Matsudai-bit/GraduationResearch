@@ -22,6 +22,8 @@ public class SlashingPlayerState : StateBase<PlayerController>
         m_animationEventHandler = new(Owner.Animator);
 
         m_animationEventHandler.PlayAnimationBool("Slashing", "BaseLayer", "Slashing");
+
+        Owner.Slash();
     }
 
     /// <summary>

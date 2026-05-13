@@ -7,6 +7,10 @@ public class EnemyController : MonoBehaviour
 
     private AnimationEventHandler m_animationEventHandler;
 
+    private bool m_isAlive = true;
+
+    public bool IsAlive => m_isAlive;
+
     private void Awake()
     {
         m_characterController = GetComponent<GameCharacterController>();
@@ -24,13 +28,31 @@ public class EnemyController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        m_animationEventHandler.OnUpdate();
+
+     
     }
 
     void TakeDamage(int damage, GameObject attacker)
     {
         Debug.Log("Hit!!!!!!!!!!1");
-        m_animationEventHandler.PlayAnimationTrigger("Impacting", "BaseLayer", "Impacting");
 
-       transform.LookAt(attacker.gameObject.transform);
+        if (m_isAlive)
+        {
+            m_animationEventHandler.PlayAnimationTrigger("Impacting", "BaseLayer", "Impacting");
+
+           transform.LookAt(attacker.gameObject.transform);
+
+            m_isAlive = false;
+            m_animationEventHandler.SetTargetTimeAction(0.99f, () => 
+            {
+                m_animationEventHandler.PlayAnimationTrigger("Death", "BaseLayer", "Death");
+                m_animationEventHandler.SetTargetTimeAction(0.9f, () =>
+                {
+                    m_animator.speed = 0.0f;
+                    m_animationEventHandler.ResetTargetTimeAction();
+                });
+            });
+        }
     }
 }

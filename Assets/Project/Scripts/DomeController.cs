@@ -1,11 +1,21 @@
+using NUnit.Framework;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class DomeController : MonoBehaviour
 {
+    List<GameObject> m_domeInObjects = new();
+
+    [SerializeField]
+    private float slowSpeed = 1.0f;
+
+    public List<GameObject> DomeInObjects => m_domeInObjects;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        LocalTimeScaleManager.Instance.SetTimeScale(GetComponent<LocalTimeScaleLayer>(), 0.1f);
+        LocalTimeScaleManager.Instance.SetTimeScale(GetComponent<LocalTimeScaleLayer>(), slowSpeed);
 
         GetComponent<MeshRenderer>().material.SetInt("_Cull", 0);
 
@@ -27,6 +37,11 @@ public class DomeController : MonoBehaviour
             timeLayer.SetBitMask(newMask);
         }
 
+        if (m_domeInObjects.Contains(other.gameObject))
+        {
+            m_domeInObjects.Remove(other.gameObject);
+        }
+
     }
     private void OnTriggerEnter(Collider other)
     {
@@ -37,7 +52,10 @@ public class DomeController : MonoBehaviour
             var newMask = GetComponent<LocalTimeScaleLayer>().TimeScaleLayerMask | timeLayer.TimeScaleLayerMask;
             timeLayer.SetBitMask(newMask);
         }
-
+        if (!m_domeInObjects.Contains(other.gameObject))
+        {
+            m_domeInObjects.Add(other.gameObject);
+        }
 
     }
 

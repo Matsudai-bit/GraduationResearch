@@ -1,3 +1,5 @@
+using System.Linq;
+using Unity.Android.Gradle;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -73,6 +75,31 @@ public class PlayerController : MonoBehaviour
     {
         m_stateMachine.FixedUpdate();
     }
+
+    public void Slash()
+    {
+        var enemies =  m_domeObject.GetComponent<DomeController>().DomeInObjects.FindAll(i => i.tag == "Enemy");
+        GameObject nearEnemy = null;
+        float minDistance = float.MaxValue;
+
+        foreach (var enemy in enemies)
+        {
+            if (enemy == null) continue;
+
+            float distance = Vector3.Distance(transform.position, enemy.transform.position);
+            if (distance < minDistance)
+            {
+                minDistance = distance;
+                nearEnemy = enemy;
+            }
+        }
+        var enemyDirection =  nearEnemy.transform.position - transform.position;
+        var length = enemyDirection.magnitude;
+        transform.position = transform.position + enemyDirection.normalized * (length - 1.0f);
+
+        transform.LookAt(nearEnemy.transform);
+    }
+
 
     public void OnMove(InputAction.CallbackContext context)
     {

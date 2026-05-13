@@ -152,6 +152,13 @@ public class AnimationEventHandler
         m_animationTargetTimeActionData.action = action;
     }
 
+    public void ResetTargetTimeAction()
+    {
+        m_changedLayerWeight = false;
+        m_animationTargetTimeActionData.changedNormalizedTime = 0.0f;
+        m_animationTargetTimeActionData.action = null;
+    }
+
     /// <summary>
     /// 指定したレイヤーのウェイトを、一定時間かけて目標値まで変更するコルーチン。
     /// </summary>
@@ -202,7 +209,7 @@ public class AnimationEventHandler
                 // コルーチンを開始
                 //StartCoroutine(TransitionLayerWeight(m_layerIndex, m_animationTargetTimeActionData.targetWeight, m_animationTargetTimeActionData.duration));
                 // アクションを実行
-                m_animationTargetTimeActionData.action.Invoke(); 
+                m_animationTargetTimeActionData.action?.Invoke(); 
             }
         }
 
