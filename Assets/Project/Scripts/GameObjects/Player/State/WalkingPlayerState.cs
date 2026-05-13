@@ -34,7 +34,7 @@ public class WalkingPlayerState : StateBase<PlayerController>
     /// <param name="deltaTime">フレーム</param>
     protected override void OnFixedUpdate()
     {
-            var rb = Owner.Rigidbody;
+        var rb = Owner.Rigidbody;
         if (!Mathf.Approximately(0.0f, Owner.MoveCommand.sqrMagnitude))
         {
             // 1. 入力ベクトルを3Dのベクトルにする (Input Space)
@@ -50,11 +50,11 @@ public class WalkingPlayerState : StateBase<PlayerController>
             Vector3 moveDirection = cameraYawRotation * inputRaw;
 
             // 4. 移動（加速度計算）
-            Vector3 force = moveDirection * Owner.SPEED /** Owner.TimeScaleHandler.CurrentTimeScale*/;
+            Vector3 force = moveDirection * Owner.SPEED * Owner.TimeScaleHandler.CurrentTimeScale;
             rb.AddForce(force);
 
             // 速度制限
-            rb.linearVelocity = Vector3.ClampMagnitude(rb.linearVelocity, Owner.SPEED /** Owner.TimeScaleHandler.CurrentTimeScale*/);
+            rb.linearVelocity = Vector3.ClampMagnitude(rb.linearVelocity, Owner.SPEED * Owner.TimeScaleHandler.CurrentTimeScale);
 
             // 5. 回転：キャラクターを入力の方向（moveDirection）へ向かせる
             Quaternion targetRotation = Quaternion.LookRotation(moveDirection);
@@ -74,14 +74,11 @@ public class WalkingPlayerState : StateBase<PlayerController>
     /// <param name="deltaTime">フレーム</param>
     protected override void OnUpdate(float deltaTime)
     {
+       
 
         m_animationEventHandler.OnUpdate();
 
-        if (Owner.IsRequestedImpact)
-        {
-            Machine.PushState<ImpactingPlayerState>();
-        }
-        else if (Owner.IsRequestedAttack)
+        if (Owner.IsRequestedAttack)
         {
             Machine.PushState<AttackingPlayerState>();
         }

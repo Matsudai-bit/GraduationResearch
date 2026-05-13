@@ -18,7 +18,7 @@ public class LocalTimeScaleLayerEditor : Editor
         // Definition Ç™ê›íËÇ≥ÇÍÇƒÇ¢ÇΩÇÁ MaskField Çï\é¶
         if (scaleLayer.Definition != null)
         {
-            var names = scaleLayer.Definition.TypeNames.ToArray();
+            var names = scaleLayer.Definition.LayerNames.ToArray();
             maskProp.intValue = EditorGUILayout.MaskField(
                 "Speed Type", maskProp.intValue, names
             );

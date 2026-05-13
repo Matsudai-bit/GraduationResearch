@@ -14,6 +14,10 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private Animator m_animator;        // アニメーター
 
+    [Header("ドームオブジェクト")]
+    [SerializeField]
+    private GameObject m_domeObject;
+
     [Header("剣のコライダー")]
     [SerializeField]
     private Collider m_sordCollider;
@@ -24,7 +28,7 @@ public class PlayerController : MonoBehaviour
     StateMachine<PlayerController> m_stateMachine ;
 
     private bool m_isRequestAttacking = false;
-    private bool m_isRequestImpacting = false;
+    private bool m_isRequestInteracting = false;
 
     public GameCharacterController m_characterController;
 
@@ -37,12 +41,11 @@ public class PlayerController : MonoBehaviour
     public LocalTimeScaleHandle TimeScaleHandler => m_characterController.TimeScaleHandler;
 
     public bool IsRequestedAttack => m_isRequestAttacking;
-    public bool IsRequestedImpact => m_isRequestImpacting;
+    public bool IsRequestedInteracting => m_isRequestInteracting;
 
     private void Awake()
     {
         m_rb = GetComponent<Rigidbody>();
-        
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -60,7 +63,7 @@ public class PlayerController : MonoBehaviour
         m_stateMachine.Update(Time.deltaTime);
 
         m_isRequestAttacking = false;
-        m_isRequestImpacting = false;
+        m_isRequestInteracting = false;
     }
 
     private void FixedUpdate()
@@ -83,9 +86,10 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public void OnImpact()
+    public void OnInteract()
     {
-        m_isRequestImpacting = true;
+        m_domeObject.SetActive(true);
+        m_domeObject.transform.position = new( transform.position.x, 0.0f, transform.position.z);
     }
 
     public void EnableAttack()

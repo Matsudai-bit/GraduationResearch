@@ -47,10 +47,6 @@ public class IdlingPlayerState : StateBase<PlayerController>
 
         }
 
-        if (Owner.IsRequestedImpact)
-        {
-            Machine.PushState<ImpactingPlayerState>();
-        }
         else if (Owner.IsRequestedAttack)
         {
             Machine.PushState<AttackingPlayerState>();

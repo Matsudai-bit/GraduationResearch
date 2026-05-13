@@ -5,7 +5,9 @@ public class DomeController : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        LocalTimeScaleManager.Instance.SetTimeScale(GetComponent<LocalTimeScaleLayer>(), 0.5f);
+        LocalTimeScaleManager.Instance.SetTimeScale(GetComponent<LocalTimeScaleLayer>(), 0.1f);
+
+        GetComponent<MeshRenderer>().material.SetInt("_Cull", 0);
 
     }
 
@@ -17,21 +19,23 @@ public class DomeController : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.gameObject.GetComponent<LocalTimeScaleLayer>())
+        var timeLayer = other.gameObject.GetComponent<LocalTimeScaleLayer>();
+
+        if (timeLayer && LocalTimeScaleLayerDefinition.Instance.GetLayerName(timeLayer.TimeScaleLayerMask) != "Player")
         {
-            var tag = other.gameObject.GetComponent<LocalTimeScaleLayer>();
-            var newMask = GetComponent<LocalTimeScaleLayer>().TimeScaleLayerMask & ~tag.TimeScaleLayerMask;
-            tag.SetBitMask(newMask);
+            var newMask = GetComponent<LocalTimeScaleLayer>().TimeScaleLayerMask & ~timeLayer.TimeScaleLayerMask;
+            timeLayer.SetBitMask(newMask);
         }
 
     }
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.GetComponent<LocalTimeScaleLayer>())
+        var timeLayer = other.gameObject.GetComponent<LocalTimeScaleLayer>();
+        if (timeLayer && LocalTimeScaleLayerDefinition.Instance.GetLayerName(timeLayer.TimeScaleLayerMask) != "Player")
         {
-            var tag = other.gameObject.GetComponent<LocalTimeScaleLayer>();
-            var newMask = GetComponent<LocalTimeScaleLayer>().TimeScaleLayerMask | tag.TimeScaleLayerMask;
-            tag.SetBitMask(newMask);
+;
+            var newMask = GetComponent<LocalTimeScaleLayer>().TimeScaleLayerMask | timeLayer.TimeScaleLayerMask;
+            timeLayer.SetBitMask(newMask);
         }
 
 

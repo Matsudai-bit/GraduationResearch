@@ -187,7 +187,7 @@ AnimatorStateMachine:
     m_Position: {x: -30, y: 210, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 3366441085133351976}
-    m_Position: {x: 530, y: 220, z: 0}
+    m_Position: {x: 520, y: 220, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -5357741495424126455}
     m_Position: {x: 800, y: 380, z: 0}
@@ -218,7 +218,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Impact
+  m_Name: Impacting
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
@@ -246,7 +246,10 @@ AnimatorStateTransition:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: 
-  m_Conditions: []
+  m_Conditions:
+  - m_ConditionMode: 1
+    m_ConditionEvent: Impacting
+    m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 0}
   m_Solo: 0
