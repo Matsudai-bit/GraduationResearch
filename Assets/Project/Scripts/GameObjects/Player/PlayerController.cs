@@ -44,8 +44,13 @@ public class PlayerController : MonoBehaviour
     public LocalTimeScaleHandle TimeScaleHandler => m_characterController.TimeScaleHandler;
 
     public bool IsRequestedAttack => m_isRequestAttacking;
+    public void ResetIsAttack() { m_isRequestAttacking = false; }
     public bool IsRequestedInteracting => m_isRequestInteracting;
+    public void ResetIsInteracting() { m_isRequestInteracting = false; }
+
     public bool IsRequestedSlashing => m_isRequestSlashing;
+    public void ResetIsSlashing() { m_isRequestSlashing = false; }
+
 
     private void Awake()
     {
@@ -65,10 +70,6 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         m_stateMachine.Update(Time.deltaTime);
-
-        m_isRequestAttacking = false;
-        m_isRequestInteracting = false;
-        m_isRequestSlashing = false;
     }
 
     private void FixedUpdate()
@@ -84,7 +85,7 @@ public class PlayerController : MonoBehaviour
 
         foreach (var enemy in enemies)
         {
-            if (enemy == null) continue;
+            if (enemy && enemy.GetComponent<EnemyController>() && !enemy.GetComponent<EnemyController>().IsAlive) continue;
 
             float distance = Vector3.Distance(transform.position, enemy.transform.position);
             if (distance < minDistance)
@@ -93,6 +94,8 @@ public class PlayerController : MonoBehaviour
                 nearEnemy = enemy;
             }
         }
+        if (!nearEnemy) return;
+
         var enemyDirection =  nearEnemy.transform.position - transform.position;
         var length = enemyDirection.magnitude;
         transform.position = transform.position + enemyDirection.normalized * (length - 1.0f);
@@ -110,7 +113,7 @@ public class PlayerController : MonoBehaviour
 
     public void OnAttack(InputAction.CallbackContext context)
     {
-        if (!context.performed)
+        if (context.performed)
         {
             if (m_domeObject.activeSelf)
             {
@@ -121,6 +124,8 @@ public class PlayerController : MonoBehaviour
                 m_isRequestAttacking = true;
             }
         }
+
+        
     }
 
     public void OnInteract(InputAction.CallbackContext context)

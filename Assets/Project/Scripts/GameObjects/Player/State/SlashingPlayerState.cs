@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 /// <summary>
@@ -19,9 +20,13 @@ public class SlashingPlayerState : StateBase<PlayerController>
     /// </summary>
     protected override void OnStartState()
     {
+
+        Owner.ResetIsSlashing();
+
         m_animationEventHandler = new(Owner.Animator);
 
-        m_animationEventHandler.PlayAnimationBool("Slashing", "BaseLayer", "Slashing");
+        m_animationEventHandler.PlayAnimationTrigger("Slashing", "BaseLayer", "Slashing");
+        
 
         Owner.Slash();
     }
@@ -41,12 +46,36 @@ public class SlashingPlayerState : StateBase<PlayerController>
     /// <param name="deltaTime">フレーム</param>
     protected override void OnUpdate(float deltaTime)
     {
+
+        // アニメーションイベントハンドラーの更新
         m_animationEventHandler.OnUpdate();
 
-        if (!m_animationEventHandler.IsPlaying())
+        // アニメーションが始まっている場合の処理
+        if (m_animationEventHandler.HasAnimationPlayed())
+        {
+            OnAnimating();
+        }
+
+    }
+
+    private void OnAnimating()
+    {
+        if (Owner.Animator.GetCurrentAnimatorStateInfo(m_animationEventHandler.LayerIndex).normalizedTime > 0.5f 
+            && Owner.IsRequestedSlashing)
+        {
+
+
+            m_animationEventHandler.RestartAnimation(); // 再生済みフラグをリセット
+
+            Machine.ChangeState<SlashingPlayerState>();
+
+            // ここで使いたい
+
+        }
+
+        else if (!m_animationEventHandler.IsPlaying())
         {
             Machine.PopState();
-
         }
     }
 
@@ -55,6 +84,7 @@ public class SlashingPlayerState : StateBase<PlayerController>
     /// </summary>
     protected override void OnExitState()
     {
-        
+        //m_animationEventHandler.StopAnimation();
+        m_animationEventHandler.ResetAnimation();
     }
 }

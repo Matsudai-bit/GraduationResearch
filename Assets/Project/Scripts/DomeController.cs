@@ -27,11 +27,35 @@ public class DomeController : MonoBehaviour
 
     }
 
+    private void OnEnable()
+    {
+        m_domeInObjects.Clear();
+    }
+
+    private void OnDisable()
+    {
+        foreach (var element in m_domeInObjects)
+        {
+            if (element == null) continue;
+            var timeLayer = element.GetComponent<LocalTimeScaleLayer>();
+
+            if (timeLayer && !LocalTimeScaleLayerDefinition.Instance.GetLayerNames(timeLayer.TimeScaleLayerMask).Contains("Player"))
+            {
+                // Domeïîï™ÇçÌèúÇ∑ÇÈ
+                var newMask = ~GetComponent<LocalTimeScaleLayer>().TimeScaleLayerMask & timeLayer.TimeScaleLayerMask;
+                timeLayer.SetBitMask(newMask);
+
+            }
+
+        }
+        m_domeInObjects.Clear();
+    }
+
     private void OnTriggerExit(Collider other)
     {
         var timeLayer = other.gameObject.GetComponent<LocalTimeScaleLayer>();
 
-        if (timeLayer && LocalTimeScaleLayerDefinition.Instance.GetLayerName(timeLayer.TimeScaleLayerMask) != "Player")
+        if (timeLayer && !LocalTimeScaleLayerDefinition.Instance.GetLayerNames(timeLayer.TimeScaleLayerMask).Contains("Player"))
         {
             var newMask = GetComponent<LocalTimeScaleLayer>().TimeScaleLayerMask & ~timeLayer.TimeScaleLayerMask;
             timeLayer.SetBitMask(newMask);
@@ -46,7 +70,7 @@ public class DomeController : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         var timeLayer = other.gameObject.GetComponent<LocalTimeScaleLayer>();
-        if (timeLayer && LocalTimeScaleLayerDefinition.Instance.GetLayerName(timeLayer.TimeScaleLayerMask) != "Player")
+        if (timeLayer && !LocalTimeScaleLayerDefinition.Instance.GetLayerNames(timeLayer.TimeScaleLayerMask).Contains("Player"))
         {
 ;
             var newMask = GetComponent<LocalTimeScaleLayer>().TimeScaleLayerMask | timeLayer.TimeScaleLayerMask;

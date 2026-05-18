@@ -40,7 +40,8 @@ public class GameCharacterController : MonoBehaviour , IDamageable
 
         m_characterSpeed.Initialize(GetComponent<LocalTimeScaleLayer>());
 
-        m_masterTrailRendererTime = m_trailRenderer.time;
+        if (m_trailRenderer)
+            m_masterTrailRendererTime = m_trailRenderer.time;
         m_characterSpeed.SetAnimationTimeScale(m_initialTimeScale);
 
     }

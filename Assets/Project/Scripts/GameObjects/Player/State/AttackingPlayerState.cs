@@ -1,4 +1,5 @@
 using UnityEngine;
+using static UnityEngine.UI.GridLayoutGroup;
 
 /// <summary>
 /// プレイヤーの待機状態
@@ -19,6 +20,8 @@ public class AttackingPlayerState : StateBase<PlayerController>
     /// </summary>
     protected override void OnStartState()
     {
+
+        Owner.ResetIsAttack();
         m_animationEventHandler = new(Owner.Animator);
 
         m_animationEventHandler.PlayAnimationTrigger("Attacking", "BaseLayer", "Attacking");
@@ -39,13 +42,25 @@ public class AttackingPlayerState : StateBase<PlayerController>
     /// <param name="deltaTime">フレーム</param>
     protected override void OnUpdate(float deltaTime)
     {
+
+        // アニメーションイベントハンドラーの更新
         m_animationEventHandler.OnUpdate();
 
-        if (m_animationEventHandler.IsPlaying())
+        // アニメーションが始まっている場合の処理
+        if (m_animationEventHandler.HasAnimationPlayed() )
+        {
+            OnAnimating();
+        }
+
+    }
+
+    private void OnAnimating ()
+    {
+
+        if (!m_animationEventHandler.IsPlaying())
         {
             Machine.PopState();
         }
-    
     }
 
     /// <summary>

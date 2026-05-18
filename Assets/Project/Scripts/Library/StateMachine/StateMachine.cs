@@ -176,6 +176,7 @@ public class StateMachine<TOwner>
             if (nowState != null)
             {
                 nowState.CallExit();
+                Debug.Log(nowState.GetType().Name + "の終了");
                 if (isPop)
                 {
                     m_stateList.RemoveLast();
@@ -199,6 +200,7 @@ public class StateMachine<TOwner>
             newState.SetMachine(this);
 
             // 開始処理
+            Debug.Log(newState.GetType() + "の開始");
             newState.CallStart();
 
             // スタックに積む

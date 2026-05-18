@@ -22,6 +22,8 @@ public class AnimationEventHandler
 
     private string m_paramName; // アニメーションのパラメータ名
 
+    public int LayerIndex => m_layerIndex;
+
     /// <summary>
     /// アニメーションレイヤーの変更に関するデータ構造
     /// </summary>
@@ -106,6 +108,9 @@ public class AnimationEventHandler
         // アニメーションを停止
         m_animator.SetBool(m_paramName, false);
 
+
+       
+
     }
 
     /// <summary>
@@ -119,7 +124,7 @@ public class AnimationEventHandler
 
         m_animator.Play(animationName, m_layerIndex);
         // アニメーションのハッシュを取得
-        m_currentAnimationHash = Animator.StringToHash(layerName + "." + animationName);
+        m_currentAnimationHash = Animator.StringToHash(animationName);
         m_hasAnimationPlayed = false; // アニメーションが再生されたことをリセット
     }
 
@@ -129,12 +134,10 @@ public class AnimationEventHandler
     /// <returns></returns>
     public bool IsPlaying()
     {
-        // 現在のアニメーションのハッシュを取得
-        int currentHash = m_animator.GetCurrentAnimatorStateInfo(m_layerIndex).fullPathHash;
-
-
-        // アニメーションが再生されているかどうかを待つ
-        return (currentHash == m_currentAnimationHash && m_animator.GetCurrentAnimatorStateInfo(m_layerIndex).normalizedTime < 1.0f);
+        // fullPathHash → shortNameHash に統一
+        int currentHash = m_animator.GetCurrentAnimatorStateInfo(m_layerIndex).shortNameHash;
+        return (currentHash == m_currentAnimationHash
+                && m_animator.GetCurrentAnimatorStateInfo(m_layerIndex).normalizedTime < 1.0f);
     }
 
 
@@ -187,8 +190,10 @@ public class AnimationEventHandler
         // 現在のアニメーションの状態を取得
         AnimatorStateInfo stateInfo = m_animator.GetCurrentAnimatorStateInfo(m_layerIndex);
 
+        
+
         // アニメーションのハッシュを取得
-        int currentHash = stateInfo.fullPathHash;
+        int currentHash = stateInfo.shortNameHash;
         if (currentHash == m_currentAnimationHash)
         {
             m_hasAnimationPlayed = true; // 置くアニメーションが再生中であることを記録
@@ -222,5 +227,14 @@ public class AnimationEventHandler
     public bool HasAnimationPlayed()
     {
         return m_hasAnimationPlayed; // 置くアニメーションが再生されたことがあるかどうかを返す
+    }
+
+    /// <summary>
+    /// 現在のアニメーションを先頭から再生し直すメソッド
+    /// </summary>
+    public void RestartAnimation()
+    {
+        m_animator.Play(m_currentAnimationHash, m_layerIndex, 0f);
+        m_hasAnimationPlayed = false;
     }
 }
