@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Linq;
 using Unity.Android.Gradle;
 using UnityEngine;
@@ -154,6 +155,28 @@ public class PlayerController : MonoBehaviour
         if (other.gameObject.GetComponent<GameCharacterController>())
         {
             other.gameObject.GetComponent<GameCharacterController>().TakeDamage(1, gameObject);
+            m_characterController.TimeScaleHandler.SetAnimationTimeScale(0.1f);
+
+            StartCoroutine(
+            RestoreAnimationTimeScaleCoroutine(0.2f));
+
+            SoundManager.GetInstance.RequestPlaying(SoundID.SE_HIT);
         }
+    }
+
+    /// <summary>
+    /// 指定時間かけてアニメーションスケールを元に戻す
+    /// </summary>
+    public IEnumerator RestoreAnimationTimeScaleCoroutine(float duration)
+    {
+        float elapsed = 0f;
+
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime; // 実時間で計測（TimeScaleが0.05fでも影響しない）
+            yield return null;
+        }
+        m_characterController.TimeScaleHandler.SetAnimationTimeScale(1.0f);
+
     }
 }
