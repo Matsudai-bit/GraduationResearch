@@ -54,6 +54,7 @@ public class IdlingPlayerState : StateBase<PlayerController>
         else if (Owner.IsRequestedSlashing)
         {
             Machine.PushState<SlashingPlayerState>();
+            Owner.ResetIsSlashing();
         }
     }
 

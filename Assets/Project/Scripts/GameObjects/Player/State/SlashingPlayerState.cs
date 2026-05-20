@@ -21,9 +21,10 @@ public class SlashingPlayerState : StateBase<PlayerController>
     protected override void OnStartState()
     {
 
-        Owner.ResetIsSlashing();
 
         m_animationEventHandler = new(Owner.Animator);
+
+        Owner.Animator.Play("Slashing", m_animationEventHandler.LayerIndex, 0.0f);
 
         m_animationEventHandler.PlayAnimationTrigger("Slashing", "BaseLayer", "Slashing");
         
@@ -49,10 +50,14 @@ public class SlashingPlayerState : StateBase<PlayerController>
 
         // アニメーションイベントハンドラーの更新
         m_animationEventHandler.OnUpdate();
-
+     
         // アニメーションが始まっている場合の処理
         if (m_animationEventHandler.HasAnimationPlayed())
         {
+            //if (!m_animationEventHandler.IsPlaying())
+            //{
+            //    Machine.PopState();
+            //}
             OnAnimating();
         }
 
@@ -64,15 +69,13 @@ public class SlashingPlayerState : StateBase<PlayerController>
             && Owner.IsRequestedSlashing)
         {
 
-
             m_animationEventHandler.RestartAnimation(); // 再生済みフラグをリセット
 
             Machine.ChangeState<SlashingPlayerState>();
+            Owner.ResetIsSlashing();
 
             // ここで使いたい
-
         }
-
         else if (!m_animationEventHandler.IsPlaying())
         {
             Machine.PopState();

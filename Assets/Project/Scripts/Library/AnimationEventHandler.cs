@@ -122,7 +122,7 @@ public class AnimationEventHandler
     {
         m_layerIndex = m_animator.GetLayerIndex(layerName);
 
-       // m_animator.Play(animationName, m_layerIndex);
+    //   m_animator.Play(animationName, m_layerIndex);
         // アニメーションのハッシュを取得
         m_currentAnimationHash = Animator.StringToHash(animationName);
         m_hasAnimationPlayed = false; // アニメーションが再生されたことをリセット
@@ -234,7 +234,7 @@ public class AnimationEventHandler
     /// </summary>
     public void RestartAnimation()
     {
-        m_animator.Play(m_currentAnimationHash, m_layerIndex, 0f);
+        m_animator.StopPlayback();
         m_hasAnimationPlayed = false;
     }
 }
