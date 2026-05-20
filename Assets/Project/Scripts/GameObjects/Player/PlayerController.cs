@@ -80,6 +80,9 @@ public class PlayerController : MonoBehaviour
 
     public void Slash()
     {
+        m_characterController.TimeScaleHandler.SetAnimationTimeScale(1.0f);
+
+
         var enemies =  m_domeObject.GetComponent<DomeController>().DomeInObjects.FindAll(i => i.tag == "Enemy");
         GameObject nearEnemy = null;
         float minDistance = float.MaxValue;
