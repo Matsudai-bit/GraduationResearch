@@ -25,6 +25,10 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private Collider m_sordCollider;
 
+    [Header("ヒットエフェクト")]
+    [SerializeField]
+    private ParticleSystem m_hitEffect;
+
     private Vector2 m_moveCommand;  // 移動コマンド
     private Rigidbody m_rb;         // リジッドボディ
 
@@ -145,23 +149,33 @@ public class PlayerController : MonoBehaviour
 
     public void EnableAttack()
     {
+        Debug.Log("コライダーON");
         m_sordCollider.gameObject.SetActive(true);
     }
     public void DisableAttack()
     {
+        Debug.Log("コライダーOFF");
+
         m_sordCollider.gameObject.SetActive(false);
     }
 
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.GetComponent<GameCharacterController>())
+        if (other.gameObject.GetComponent<GameCharacterController>() && other.gameObject.tag == "Enemy")
         {
             other.gameObject.GetComponent<GameCharacterController>().TakeDamage(1, gameObject);
             m_characterController.TimeScaleHandler.SetAnimationTimeScale(0.1f);
 
+
+            var main = m_hitEffect.main;
+            main.simulationSpeed = m_characterController.TimeScaleHandler.CurrentTimeScale;
+
+            m_hitEffect.Play(true);
+
+            
             StartCoroutine(
-            RestoreAnimationTimeScaleCoroutine(0.2f));
+            RestoreAnimationTimeScaleCoroutine(0.4f));
 
             SoundManager.GetInstance.RequestPlaying(SoundID.SE_HIT);
         }

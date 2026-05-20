@@ -25,7 +25,6 @@ public class WalkingPlayerState : StateBase<PlayerController>
 
         //Owner.Animator.SetBool("Running", true)
 
-        Debug.Log("•à‚­ó‘Ô‚ÌŠJn");
     }
 
     /// <summary>
@@ -94,7 +93,6 @@ public class WalkingPlayerState : StateBase<PlayerController>
     protected override void OnExitState()
     {
         m_animationEventHandler.StopAnimation();
-        Debug.Log("•à‚­ó‘Ô‚ÌI—¹");
 
     }
 }
