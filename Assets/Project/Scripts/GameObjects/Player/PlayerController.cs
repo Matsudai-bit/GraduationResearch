@@ -141,7 +141,8 @@ public class PlayerController : MonoBehaviour
      //   if (!context.performed)
         {
             m_domeObject.SetActive(!m_domeObject.activeSelf);
-            m_domeObject.transform.position = new(transform.position.x, transform.position.y - 0.5f, transform.position.z);
+            m_domeObject.transform.position = new(transform.position.x, transform.position.y - 0.5f
+                , transform.position.z);
         }
        
     }
