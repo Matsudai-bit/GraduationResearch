@@ -140,9 +140,8 @@ public class PlayerController : MonoBehaviour
     {
      //   if (!context.performed)
         {
-            Debug.Log("osita");
             m_domeObject.SetActive(!m_domeObject.activeSelf);
-            m_domeObject.transform.position = new(transform.position.x, 0.0f, transform.position.z);
+            m_domeObject.transform.position = new(transform.position.x, transform.position.y - 0.5f, transform.position.z);
         }
        
     }
