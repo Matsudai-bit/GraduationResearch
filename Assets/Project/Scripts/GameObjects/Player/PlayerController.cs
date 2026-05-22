@@ -3,14 +3,19 @@ using System.Linq;
 using Unity.Android.Gradle;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using static UnityEngine.UI.GridLayoutGroup;
 
 /// <summary>
 /// プレイヤーコントローラ
 /// </summary>
 public class PlayerController : MonoBehaviour
 {
+    [Header("加速度")]
     [SerializeField]
     public  float SPEED = 0.0f;     // スピード
+    [Header("最大の速さ")]
+    [SerializeField]
+    public float MAX_SPEED = 0.0f;     // スピード
     [SerializeField]
     private Transform m_cameraTransform; // カメラのトランスフォーム
 
@@ -76,9 +81,9 @@ public class PlayerController : MonoBehaviour
     {
         m_stateMachine.Update(Time.deltaTime);
     }
-
     private void FixedUpdate()
     {
+        Animator.SetFloat("RunningSpeedScale", m_rb.linearVelocity.magnitude / (MAX_SPEED));
         m_stateMachine.FixedUpdate();
     }
 
@@ -165,29 +170,24 @@ public class PlayerController : MonoBehaviour
         if (other.gameObject.GetComponent<GameCharacterController>() && other.gameObject.tag == "Enemy")
         {
             Debug.Log("剣が" + other.gameObject.name + "に衝突しました");
-            other.gameObject.GetComponent<GameCharacterController>().TakeDamage(1, gameObject);
+
+            // ヒットエフェクトを表示
+            Vector3 hitPosition = other.ClosestPoint(m_sordCollider.transform.position);
+            other.gameObject.GetComponent<GameCharacterController>().TakeDamage(1, gameObject, hitPosition);
+
+
+            //var main = m_hitEffect.main;
+            //main.simulationSpeed = m_characterController.TimeScaleHandler.CurrentTimeScale;
+
+            //m_hitEffect.Play(true);
+
+            // ヒットストップの設定
             m_characterController.TimeScaleHandler.SetAnimationTimeScale(0.1f);
-
-
-            var main = m_hitEffect.main;
-            main.simulationSpeed = m_characterController.TimeScaleHandler.CurrentTimeScale;
-
-            m_hitEffect.Play(true);
-
-            
             StartCoroutine(
             RestoreAnimationTimeScaleCoroutine(0.4f));
 
+            // 効果音の再生
             SoundManager.GetInstance.RequestPlaying(SoundID.SE_HIT);
-        }
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.gameObject.GetComponent<GameCharacterController>() && other.gameObject.tag == "Enemy")
-        {
-            Debug.Log("剣が" + other.gameObject.name + "からでます");
-           
         }
     }
 
@@ -206,4 +206,13 @@ public class PlayerController : MonoBehaviour
         m_characterController.TimeScaleHandler.SetAnimationTimeScale(1.0f);
 
     }
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.GetComponent<GameCharacterController>() && other.gameObject.tag == "Enemy")
+        {
+            Debug.Log("剣が" + other.gameObject.name + "からでます");
+           
+        }
+    }
+
 }

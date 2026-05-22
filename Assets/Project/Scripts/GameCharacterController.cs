@@ -4,6 +4,10 @@ using UnityEngine.Playables;
 
 public class GameCharacterController : MonoBehaviour , IDamageable
 {
+    [Header("タイムスケール")]
+    [SerializeField]
+    float m_timeScale;
+
     [SerializeField]
     private Animator            m_animator;
     private ParticleSystem      m_particle;
@@ -12,12 +16,13 @@ public class GameCharacterController : MonoBehaviour , IDamageable
     private TrailRenderer       m_trailRenderer;
     private Rigidbody m_rb;
 
-    public Action<int, GameObject> takeDamage;
+    public Action<int, GameObject, Vector3> takeDamage;
 
     private float m_masterTrailRendererTime = 0.0f;
 
     public float m_initialTimeScale = 1.0f;
 
+    [SerializeField]
     LocalTimeScaleHandle              m_characterSpeed = new();
 
     public LocalTimeScaleHandle TimeScaleHandler { get { return m_characterSpeed; } }
@@ -48,6 +53,7 @@ public class GameCharacterController : MonoBehaviour , IDamageable
 
     private void UpdateSpeed(float speed)
     {
+        m_timeScale = speed;
 
         // Animatorのスピード更新
         if (m_animator)
@@ -91,9 +97,9 @@ public class GameCharacterController : MonoBehaviour , IDamageable
     /// </summary>
     /// <param name="damage"></param>
     /// <exception cref="System.NotImplementedException"></exception>
-    public void TakeDamage(int damage, GameObject attacker)
+    public void TakeDamage(int damage, GameObject attacker, Vector3 hitPosition)
     {
-        takeDamage?.Invoke(damage, attacker);
+        takeDamage?.Invoke(damage, attacker, hitPosition);
     }
 
     private void OnCollisionEnter(Collision collision)

@@ -110,7 +110,7 @@ public class AnimationEventHandler
 
 
        
-
+      
     }
 
     private void SetupAnimation(string animationName, string layerName)
@@ -193,9 +193,7 @@ public class AnimationEventHandler
     public void OnUpdate()
     {
         // 現在のアニメーションの状態を取得
-        AnimatorStateInfo stateInfo = m_animator.GetCurrentAnimatorStateInfo(m_layerIndex);
-
-        
+        AnimatorStateInfo stateInfo = m_animator.GetCurrentAnimatorStateInfo(m_layerIndex);        
 
         // アニメーションのハッシュを取得
         int currentHash = stateInfo.shortNameHash;

@@ -1,8 +1,10 @@
 using System;
 using UnityEngine;
 
+[Serializable]
 public class LocalTimeScaleHandle 
 {
+    
     private readonly LocalTimeScale m_baseTimeScale = new();  // Šî€‚Ì‘¬‚³
     private  LocalClock     m_localClock;
     public float CurrentTimeScale => m_baseTimeScale.TimeScale * m_animationTimeScale;

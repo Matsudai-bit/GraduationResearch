@@ -58,7 +58,7 @@ public class DomeController : MonoBehaviour
 
         if (timeLayer && !LocalTimeScaleLayerDefinition.Instance.GetLayerNames(timeLayer.TimeScaleLayerMask).Contains("Player"))
         {
-            if (other.GetComponent<EnemyController>() && !other.GetComponent<EnemyController>().IsAlive)
+            if (other.gameObject.GetComponent<EnemyController>() && !other.gameObject.GetComponent<EnemyController>().IsAlive)
             {
                 return;
             }

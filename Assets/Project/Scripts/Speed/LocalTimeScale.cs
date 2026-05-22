@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class LocalTimeScale 
 {
+  
     private float m_timeScale = 1f;
 
     private LocalTimeScaleLayer m_timeScaleLayer ;

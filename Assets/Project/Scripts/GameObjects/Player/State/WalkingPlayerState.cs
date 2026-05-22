@@ -27,46 +27,40 @@ public class WalkingPlayerState : StateBase<PlayerController>
 
     }
 
-    /// <summary>
-    /// 状態のフィクス更新時に呼ばれる
-    /// </summary>
-    /// <param name="deltaTime">フレーム</param>
+    [SerializeField] private float m_rotationSpeed = 360.0f; // Inspectorで調整可能に
+
     protected override void OnFixedUpdate()
     {
         var rb = Owner.Rigidbody;
-        if (!Mathf.Approximately(0.0f, Owner.MoveCommand.sqrMagnitude))
+        if (Owner.MoveCommand.sqrMagnitude > 0.0f)
         {
-            // 1. 入力ベクトルを3Dのベクトルにする (Input Space)
             Vector3 inputRaw = new Vector3(Owner.MoveCommand.x, 0.0f, Owner.MoveCommand.y);
 
-            // 2. カメラの回転から「Y軸（左右）の回転だけ」を取り出す
-            // カメラのForward方向から上方向成分を消して平坦にする
             Vector3 cameraForward = Owner.CameraTransform.forward;
             cameraForward.y = 0;
             Quaternion cameraYawRotation = Quaternion.LookRotation(cameraForward);
-
-            // 3. 入力ベクトルをカメラの向きに合わせて回転させる (World Space)
             Vector3 moveDirection = cameraYawRotation * inputRaw;
 
-            // 4. 移動（加速度計算）
-            Vector3 force = moveDirection * Owner.SPEED * Owner.TimeScaleHandler.CurrentTimeScale;
-            rb.AddForce(force);
+            float speed = Owner.SPEED * Owner.TimeScaleHandler.CurrentTimeScale;
 
-            // 速度制限
-            rb.linearVelocity = Vector3.ClampMagnitude(rb.linearVelocity, Owner.SPEED * Owner.TimeScaleHandler.CurrentTimeScale);
+            // 現在の水平速度
+            Vector3 horizontalVelocity = new Vector3(rb.linearVelocity.x, 0, rb.linearVelocity.z);
 
-            // 5. 回転：キャラクターを入力の方向（moveDirection）へ向かせる
+            // 目標速度との差分だけForceをかける（自然な加減速になる）
+            Vector3 targetVelocity = moveDirection * speed;
+            Vector3 velocityDiff = targetVelocity - horizontalVelocity;
+       
+            velocityDiff = Vector3.ClampMagnitude(velocityDiff, Owner.MAX_SPEED);
+            rb.AddForce(velocityDiff, ForceMode.VelocityChange);
+
+            // 回転
             Quaternion targetRotation = Quaternion.LookRotation(moveDirection);
-            rb.MoveRotation(Quaternion.RotateTowards(rb.rotation, targetRotation, 10.0f));
+            rb.MoveRotation(Quaternion.RotateTowards(rb.rotation, targetRotation, m_rotationSpeed * Time.fixedDeltaTime));
+
 
         }
-        else if (Mathf.Approximately(0.0f, rb.linearVelocity.sqrMagnitude))
-        {
-            Machine.PopState();
-        }
-
+ 
     }
-
     /// <summary>
     /// 状態の更新時に呼ばれる
     /// </summary>
@@ -84,6 +78,10 @@ public class WalkingPlayerState : StateBase<PlayerController>
         else if (Owner.IsRequestedSlashing)
         {
             Machine.PushState<SlashingPlayerState>();
+        }
+        else if (Owner.Rigidbody.linearVelocity.sqrMagnitude < (1.0f * 1.0f))
+        {
+            Machine.PopState();
         }
     }
 

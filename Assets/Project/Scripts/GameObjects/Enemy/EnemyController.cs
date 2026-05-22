@@ -21,7 +21,7 @@ public class EnemyController : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+
         m_characterController.takeDamage = TakeDamage;
     }
 
@@ -33,14 +33,22 @@ public class EnemyController : MonoBehaviour
 
     }
 
-    void TakeDamage(int damage, GameObject attacker)
+    void TakeDamage(int damage, GameObject attacker, Vector3 hitPosition)
     {
 
         if (m_isAlive)
         {
+            var effectOption = new EffectPlayOptions();
+            effectOption.Speed = m_characterController.TimeScaleHandler.CurrentTimeScale * 0.4f;
+            int id = EffectManager.Instance.Play(EffectID.HitEffect, hitPosition, effectOption);
+
+
+            m_characterController.TimeScaleHandler.onChangeBaseTimeScale += (timeScale) => { EffectManager.Instance.SetSpeed(id, timeScale); };
+
+
             m_animationEventHandler.PlayAnimationTrigger("Impacting", "BaseLayer", "Impacting");
 
-           transform.LookAt(attacker.gameObject.transform);
+            transform.LookAt(attacker.gameObject.transform);
 
             m_isAlive = false;
             m_animationEventHandler.SetTargetTimeAction(0.5f, () =>
