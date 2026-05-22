@@ -2,6 +2,7 @@ using NUnit.Framework;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Splines;
 
 public class DomeController : MonoBehaviour
 {
@@ -57,6 +58,10 @@ public class DomeController : MonoBehaviour
 
         if (timeLayer && !LocalTimeScaleLayerDefinition.Instance.GetLayerNames(timeLayer.TimeScaleLayerMask).Contains("Player"))
         {
+            if (other.GetComponent<EnemyController>() && !other.GetComponent<EnemyController>().IsAlive)
+            {
+                return;
+            }
             var newMask = GetComponent<LocalTimeScaleLayer>().TimeScaleLayerMask & ~timeLayer.TimeScaleLayerMask;
             timeLayer.SetBitMask(newMask);
         }
@@ -72,6 +77,11 @@ public class DomeController : MonoBehaviour
         var timeLayer = other.gameObject.GetComponent<LocalTimeScaleLayer>();
         if (timeLayer && !LocalTimeScaleLayerDefinition.Instance.GetLayerNames(timeLayer.TimeScaleLayerMask).Contains("Player"))
         {
+            if (other.GetComponent<EnemyController>() && !other.GetComponent<EnemyController>().IsAlive)
+            {
+                return;
+            }
+
 ;
             var newMask = GetComponent<LocalTimeScaleLayer>().TimeScaleLayerMask | timeLayer.TimeScaleLayerMask;
             timeLayer.SetBitMask(newMask);

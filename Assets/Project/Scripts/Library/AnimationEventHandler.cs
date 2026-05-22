@@ -59,7 +59,7 @@ public class AnimationEventHandler
         m_animator.SetTrigger(paramName);
 
         // アニメーションの再生
-        PlayAnimation(animationName, layerName);
+        SetupAnimation(animationName, layerName);
 
     }
 
@@ -78,7 +78,7 @@ public class AnimationEventHandler
         m_animator.SetBool(m_paramName, true);
 
         // アニメーションの再生
-        PlayAnimation(animationName, layerName);
+        SetupAnimation(animationName, layerName);
     }
 
     public void ResetAnimation()
@@ -113,19 +113,24 @@ public class AnimationEventHandler
 
     }
 
+    private void SetupAnimation(string animationName, string layerName)
+    {
+        m_layerIndex = m_animator.GetLayerIndex(layerName);
+        m_currentAnimationHash = Animator.StringToHash(animationName);
+        m_hasAnimationPlayed = false; // アニメーションが再生されたことをリセット
+    }
+
     /// <summary>
     /// 指定したアニメーションを再生するメソッド
     /// </summary>
     /// <param name="animationName"></param>
     /// <param name="layerName"></param>
-    private void PlayAnimation(string animationName, string layerName)
+    public void PlayAnimation(string animationName, string layerName)
     {
-        m_layerIndex = m_animator.GetLayerIndex(layerName);
+        SetupAnimation(animationName, layerName);
+        m_animator.Play(animationName, m_layerIndex, 0.0f);
 
-    //   m_animator.Play(animationName, m_layerIndex);
-        // アニメーションのハッシュを取得
-        m_currentAnimationHash = Animator.StringToHash(animationName);
-        m_hasAnimationPlayed = false; // アニメーションが再生されたことをリセット
+       
     }
 
     /// <summary>

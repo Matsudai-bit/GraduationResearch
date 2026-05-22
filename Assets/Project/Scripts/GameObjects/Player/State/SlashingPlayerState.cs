@@ -24,9 +24,9 @@ public class SlashingPlayerState : StateBase<PlayerController>
 
         m_animationEventHandler = new(Owner.Animator);
 
-        Owner.Animator.Play("Slashing", m_animationEventHandler.LayerIndex, 0.0f);
+       // Owner.Animator.Play("Slashing", m_animationEventHandler.LayerIndex, 0.0f);
 
-        m_animationEventHandler.PlayAnimationTrigger("Slashing", "BaseLayer", "Slashing");
+        m_animationEventHandler.PlayAnimation("Slashing", "BaseLayer");
         
 
         Owner.Slash();
@@ -54,10 +54,7 @@ public class SlashingPlayerState : StateBase<PlayerController>
         // アニメーションが始まっている場合の処理
         if (m_animationEventHandler.HasAnimationPlayed())
         {
-            //if (!m_animationEventHandler.IsPlaying())
-            //{
-            //    Machine.PopState();
-            //}
+
             OnAnimating();
         }
 

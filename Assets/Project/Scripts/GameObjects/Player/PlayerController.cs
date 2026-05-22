@@ -164,6 +164,7 @@ public class PlayerController : MonoBehaviour
     {
         if (other.gameObject.GetComponent<GameCharacterController>() && other.gameObject.tag == "Enemy")
         {
+            Debug.Log("åïÇ™" + other.gameObject.name + "Ç…è’ìÀÇµÇ‹ÇµÇΩ");
             other.gameObject.GetComponent<GameCharacterController>().TakeDamage(1, gameObject);
             m_characterController.TimeScaleHandler.SetAnimationTimeScale(0.1f);
 
@@ -178,6 +179,15 @@ public class PlayerController : MonoBehaviour
             RestoreAnimationTimeScaleCoroutine(0.4f));
 
             SoundManager.GetInstance.RequestPlaying(SoundID.SE_HIT);
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.GetComponent<GameCharacterController>() && other.gameObject.tag == "Enemy")
+        {
+            Debug.Log("åïÇ™" + other.gameObject.name + "Ç©ÇÁÇ≈Ç‹Ç∑");
+           
         }
     }
 

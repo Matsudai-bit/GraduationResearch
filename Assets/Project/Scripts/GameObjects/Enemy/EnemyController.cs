@@ -35,7 +35,6 @@ public class EnemyController : MonoBehaviour
 
     void TakeDamage(int damage, GameObject attacker)
     {
-        Debug.Log("Hit!!!!!!!!!!1");
 
         if (m_isAlive)
         {
@@ -44,8 +43,10 @@ public class EnemyController : MonoBehaviour
            transform.LookAt(attacker.gameObject.transform);
 
             m_isAlive = false;
-            m_animationEventHandler.SetTargetTimeAction(0.95f, () => 
+            m_animationEventHandler.SetTargetTimeAction(0.5f, () =>
             {
+                m_animationEventHandler.ResetTargetTimeAction();
+
                 m_animationEventHandler.PlayAnimationTrigger("Death", "BaseLayer", "Death");
                 m_animationEventHandler.SetTargetTimeAction(0.9f, () =>
                 {
