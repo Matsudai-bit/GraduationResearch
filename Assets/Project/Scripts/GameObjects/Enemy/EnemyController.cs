@@ -38,12 +38,17 @@ public class EnemyController : MonoBehaviour
 
         if (m_isAlive)
         {
-            var effectOption = new EffectPlayOptions();
-            effectOption.Speed = m_characterController.TimeScaleHandler.CurrentTimeScale * 0.4f;
-            int id = EffectManager.Instance.Play(EffectID.HitEffect, hitPosition, effectOption);
+            if (DebugSettings.Instance.applyHitEffect)
+            {
+                // ヒットエフェクトを再生
+                var effectOption = new EffectPlayOptions();
+                effectOption.Speed = m_characterController.TimeScaleHandler.CurrentTimeScale * 0.4f;
+                int id = EffectManager.Instance.Play(EffectID.HitEffect, hitPosition, effectOption);
+           
+                 m_characterController.TimeScaleHandler.onChangeBaseTimeScale += (timeScale) => { EffectManager.Instance.SetSpeed(id, timeScale); };
+            }
+ 
 
-
-            m_characterController.TimeScaleHandler.onChangeBaseTimeScale += (timeScale) => { EffectManager.Instance.SetSpeed(id, timeScale); };
 
 
             m_animationEventHandler.PlayAnimationTrigger("Impacting", "BaseLayer", "Impacting");

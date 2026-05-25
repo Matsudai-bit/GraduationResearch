@@ -9,9 +9,14 @@ public class DomeController : MonoBehaviour
     List<GameObject> m_domeInObjects = new();
 
     [SerializeField]
-    private float slowSpeed = 1.0f;
+    private float slowSpeed = 0.0f;
 
     public List<GameObject> DomeInObjects => m_domeInObjects;
+
+    private void Awake()
+    {
+        slowSpeed = DebugSettings.Instance.domeTimeScale;
+    }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()

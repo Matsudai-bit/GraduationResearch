@@ -1,9 +1,7 @@
 using System.Collections;
-using System.Linq;
-using Unity.Android.Gradle;
+
 using UnityEngine;
 using UnityEngine.InputSystem;
-using static UnityEngine.UI.GridLayoutGroup;
 
 /// <summary>
 /// プレイヤーコントローラ
@@ -18,6 +16,11 @@ public class PlayerController : MonoBehaviour
     public float MAX_SPEED = 0.0f;     // スピード
     [SerializeField]
     private Transform m_cameraTransform; // カメラのトランスフォーム
+
+    [Header("残像処理をするかどうか")]
+    [SerializeField]
+    AfterImageSkinnedMeshController m_afterImageController;
+    
 
     [SerializeField]
     private Animator m_animator;        // アニメーター
@@ -47,11 +50,13 @@ public class PlayerController : MonoBehaviour
 
 
 
+    public AfterImageSkinnedMeshController AfterImageController => m_afterImageController;
     public Animator Animator => m_animator;
     public Vector2 MoveCommand => m_moveCommand;
     public Rigidbody Rigidbody=> m_rb;
     public Transform CameraTransform => m_cameraTransform;
     public LocalTimeScaleHandle TimeScaleHandler => m_characterController.TimeScaleHandler;
+    public GameObject DomeObject => m_domeObject;
 
     public bool IsRequestedAttack => m_isRequestAttacking;
     public void ResetIsAttack() { m_isRequestAttacking = false; }
@@ -87,34 +92,7 @@ public class PlayerController : MonoBehaviour
         m_stateMachine.FixedUpdate();
     }
 
-    public void Slash()
-    {
-        m_characterController.TimeScaleHandler.SetAnimationTimeScale(1.0f);
-
-
-        var enemies =  m_domeObject.GetComponent<DomeController>().DomeInObjects.FindAll(i => i.tag == "Enemy");
-        GameObject nearEnemy = null;
-        float minDistance = float.MaxValue;
-
-        foreach (var enemy in enemies)
-        {
-            if (enemy && enemy.GetComponent<EnemyController>() && !enemy.GetComponent<EnemyController>().IsAlive) continue;
-
-            float distance = Vector3.Distance(transform.position, enemy.transform.position);
-            if (distance < minDistance)
-            {
-                minDistance = distance;
-                nearEnemy = enemy;
-            }
-        }
-        if (!nearEnemy) return;
-
-        var enemyDirection =  nearEnemy.transform.position - transform.position;
-        var length = enemyDirection.magnitude;
-        transform.position = transform.position + enemyDirection.normalized * (length - 1.0f);
-
-        transform.LookAt(nearEnemy.transform);
-    }
+   
 
 
     public void OnMove(InputAction.CallbackContext context)
@@ -146,6 +124,7 @@ public class PlayerController : MonoBehaviour
      //   if (!context.performed)
         {
             m_domeObject.SetActive(!m_domeObject.activeSelf);
+            m_afterImageController.isCreate = m_domeObject.activeSelf && DebugSettings.Instance.applyAfterImage;
             m_domeObject.transform.position = new(transform.position.x, transform.position.y - 0.5f
                 , transform.position.z);
         }
@@ -171,8 +150,9 @@ public class PlayerController : MonoBehaviour
         {
             Debug.Log("剣が" + other.gameObject.name + "に衝突しました");
 
-            // ヒットエフェクトを表示
+            // 攻撃通知を送る
             Vector3 hitPosition = other.ClosestPoint(m_sordCollider.transform.position);
+      
             other.gameObject.GetComponent<GameCharacterController>().TakeDamage(1, gameObject, hitPosition);
 
 
@@ -180,14 +160,22 @@ public class PlayerController : MonoBehaviour
             //main.simulationSpeed = m_characterController.TimeScaleHandler.CurrentTimeScale;
 
             //m_hitEffect.Play(true);
+            if (DebugSettings.Instance.applyHitStop)
+            {
+                // ヒットストップの設定
+                m_characterController.TimeScaleHandler.SetAnimationTimeScale(DebugSettings.Instance.hitStopApplyTimeScale);
+                StartCoroutine(
+                RestoreAnimationTimeScaleCoroutine(DebugSettings.Instance.hitStopTime));
+            
 
-            // ヒットストップの設定
-            m_characterController.TimeScaleHandler.SetAnimationTimeScale(0.1f);
-            StartCoroutine(
-            RestoreAnimationTimeScaleCoroutine(0.4f));
+            }
 
-            // 効果音の再生
-            SoundManager.GetInstance.RequestPlaying(SoundID.SE_HIT);
+            if (DebugSettings.Instance.applySE)
+            {
+                // 効果音の再生
+                SoundManager.GetInstance.RequestPlaying(SoundID.SE_HIT);
+
+            }
         }
     }
 
@@ -213,6 +201,12 @@ public class PlayerController : MonoBehaviour
             Debug.Log("剣が" + other.gameObject.name + "からでます");
            
         }
+    }
+
+    public void OnStartCoroutine(IEnumerator enumerator)
+    {
+        StartCoroutine(enumerator);
+
     }
 
 }
